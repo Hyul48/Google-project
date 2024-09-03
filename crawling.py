@@ -2,7 +2,6 @@ import requests
 from bs4 import BeautifulSoup
 import json
 import os
-import re
 
 # 카테고리와 관련된 이름 정의
 categories = {
@@ -45,14 +44,8 @@ def unique_filename(directory, filename):
     return new_filename
 
 def mask_company_name(text, company_name):
-    """ 회사명을 [MASK]로 대체, '(주)'가 앞뒤 어디에 있든 처리 """
-    # '(주)'를 포함하여 회사명의 모든 변형을 제거
-    pattern = re.compile(r'\(주\)\s*|\s*\(주\)', re.IGNORECASE)
-    simple_name = pattern.sub('', company_name).strip()
-    text = pattern.sub('[MASK]', text)  # 모든 (주)를 먼저 마스크
-    text = re.sub(re.escape(company_name), '[MASK]', text, flags=re.IGNORECASE)
-    text = re.sub(re.escape(simple_name), '[MASK]', text, flags=re.IGNORECASE)
-    return text
+    """ 회사명을 [MASK]로 대체 """
+    return text.replace(company_name, "[MASK]")
 
 def crawl_category(category_id, category_name):
     category_folder = os.path.join('company_data', category_name)
