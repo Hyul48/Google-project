@@ -43,10 +43,6 @@ def unique_filename(directory, filename):
 
     return new_filename
 
-def mask_company_name(text, company_name):
-    """ 회사명을 [MASK]로 대체 """
-    return text.replace(company_name, "[MASK]")
-
 def crawl_category(category_id, category_name):
     category_folder = os.path.join('company_data', category_name)
     if not os.path.exists(category_folder):
@@ -84,7 +80,7 @@ def crawl_category(category_id, category_name):
 
             for q, a in zip(questions, answers):
                 question_text = q.get_text(strip=True)
-                answer_text = mask_company_name(a.get_text(strip=True), company['name'])
+                answer_text = a.get_text(strip=True)
                 qa_list.append({'Question': question_text, 'Answer': answer_text})
 
             safe_company_name = company['name'].replace('/', '_').replace('\\', '_').replace(':', '_').replace('*', '_').replace('?', '_').replace('"', '_').replace('<', '_').replace('>', '_').replace('|', '_')
