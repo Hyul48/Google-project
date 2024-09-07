@@ -1,49 +1,77 @@
-# 자소서 데이터 마스킹 및 처리 스크립트
 
-이 리포지토리는 특정 디렉토리 내 텍스트 파일에서 회사 이름을 마스킹하고, 질문과 답변 형식으로 변환한 후 JSON 파일로 저장하는 Python 스크립트를 포함하고 있습니다.
+# Google-project: 자소서 데이터 처리 자동화
+
+## 프로젝트 설명
+이 프로젝트는 자소서 파일에서 특정 회사 이름을 자동으로 마스킹하고, 질문과 답변 형식으로 데이터를 재구성한 후 JSON 파일로 저장하는 Python 기반의 스크립트 모음입니다. 이 스크립트는 지원자의 자소서를 효율적으로 관리하고 분석하기 위한 목적으로 설계되었습니다.
 
 ## 주요 기능
+1. **회사 이름 마스킹**  
+   자소서에 포함된 특정 회사 이름을 감지하여 임의의 마스킹 문자열로 대체합니다.  
+   다양한 회사 이름을 리스트 형태로 관리하여 쉽게 추가, 삭제할 수 있습니다.
 
-- **회사 이름 마스킹**: 파일 내 지정된 회사 이름을 마스킹합니다.
-- **질문과 답변 분리**: 텍스트를 질문과 답변 형식으로 분리합니다.
-- **JSON 저장**: 처리된 데이터를 JSON 형식으로 저장합니다.
-- **중복 파일 제거**: 중복된 파일을 자동으로 삭제합니다.
-- **빈 파일 삭제**: 내용이 없는 빈 파일을 삭제합니다.
-- **파일명 일괄 수정**: 처리된 파일을 순서에 따라 파일명을 수정합니다.
+2. **질문/답변 분리**  
+   자소서의 내용에서 질문과 답변을 자동으로 분리하여 구조화된 형식으로 변환합니다.  
+   변환된 데이터는 JSON 파일로 저장됩니다.
 
-## 요구사항
+3. **중복 및 빈 파일 제거**  
+   입력된 자소서 파일 중 중복되거나 내용이 비어 있는 파일을 자동으로 감지하고 삭제합니다.
 
-- Python 3.x
-- 필요한 패키지: `re`, `os`, `sys`, `json`
+4. **파일명 자동 수정**  
+   자소서 파일명을 규칙에 따라 일괄 수정하여 관리의 편의성을 제공합니다.
 
-## 설치 및 사용법
+5. **추가 스크립트: 지원동기 추출**  
+   `combine_json.py` 스크립트를 통해 자소서 파일에서 지원동기 부분만 추출하여 별도의 JSON 파일로 병합할 수 있습니다.
 
-1. 리포지토리를 클론합니다.
+## 설치 및 실행 방법
+
+### 1. 사전 요구사항
+- Python 3.x 버전
+- 필요한 패키지 설치:
    ```bash
-      git clone https://github.com/yourusername/your-repo.git
-      cd your-repo```
-
-2. Dataset 폴더 내부에 pre_processing.py
-
-3. 스크립트의 company_names 리스트에 마스킹하려는 회사 이름을 추가합니다.
-
-   ```python
-   company_names = ['삼성 SDS', '삼성']```
-   확인은 안해봤지만 세부 사항에서 포괄적인 범주로 넘어가야 할 것 같습니다. ex) ['LG화학', 'LG전자', 'LG']
-
-4. 스크립트의 input_dir와 output_dir 경로를 설정합니다.
-
-   ```python
-     input_dir = r'C:\\TailorCV\\Dataset\\삼성
-     output_dir = r'C:\\TailorCV\\Dataset\\Thebe_processed
+   pip install -r requirements.txt
    ```
-## 추가 ##
-자소서 json파일에서 지원동기만 불러올 수 있게끔 설정 (단, 지원동기가 가장 위에 있어야 함 지원 동기가 첫번째가 아닐 경우 combine_json.py에서 index 수정 필요)
-```python
-   content = data[0]['answer']
-``` 
-combine_json.py 실행방법
-```python
-   directory_path = 'C:\TailorCV\Dataset\Thebe_processed'
+
+### 2. 사용법
+1. 프로젝트 클론:
+   ```bash
+   git clone https://github.com/Hyul48/Google-project.git
+   cd Google-project
+   ```
+2. `company_names.txt` 파일에 마스킹할 회사 이름 추가
+3. `input_dir` 및 `output_dir` 경로 설정
+4. 스크립트 실행:
+   ```bash
+   python main.py
+   ```
+
+## 디렉토리 구조
 ```
-pre_processing.py 로 생성된 데이터 폴더를 입력 경로로 지정해주기만 하면 combine_json파일 생성됨
+Google-project/
+│
+├── data/                # 자소서 파일을 저장하는 디렉토리
+│   ├── input/           # 원본 자소서 파일 위치
+│   ├── output/          # 처리된 파일 저장 위치
+│
+├── company_names.txt    # 마스킹할 회사 이름 리스트
+├── main.py              # 메인 스크립트
+├── combine_json.py      # 지원동기 추출 스크립트
+├── requirements.txt     # 필요한 패키지 목록
+└── README.md            # 프로젝트 설명 파일
+```
+
+## 사용된 기술 스택
+- **Python**: 주요 프로그래밍 언어
+- **OS 모듈**: 파일 입출력 및 경로 관리
+- **JSON 모듈**: 데이터 처리 및 저장
+- **Regex**: 패턴 매칭을 통한 텍스트 분석
+- **Google API**: 추가적으로 사용할 수 있는 Google API 관련 기능
+
+## 기여 방법
+이 프로젝트에 기여하려면 아래 단계를 따르세요:
+1. 리포지토리 포크
+2. 새로운 브랜치 생성 (`feature-브랜치이름`)
+3. 변경 사항 커밋
+4. Pull Request 제출
+
+## 라이선스
+이 프로젝트는 MIT 라이선스를 따릅니다. 자세한 내용은 [LICENSE](LICENSE) 파일을 참고하세요.
